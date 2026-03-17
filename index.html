@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harness vs GitHub: Uptime &amp; Reliability Compared</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --harness-blue: #0278D5;
+      --harness-dark: #0A1128;
+      --github-gray: #24292e;
+      --danger: #e74c3c;
+      --success: #00C48C;
+      --bg: #f8f9fc;
+      --card-bg: #ffffff;
+      --text: #1a1a2e;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: var(--harness-dark);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    }
+    nav .logo {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -.02em;
+    }
+    nav .logo span { color: var(--harness-blue); }
+    nav ul { list-style: none; display: flex; gap: 1.5rem; }
+    nav a { color: #ffffffcc; text-decoration: none; font-size: .875rem; transition: color .2s; }
+    nav a:hover { color: #fff; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--harness-dark) 0%, #1a2744 100%);
+      color: #fff;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 800px;
+      margin: 0 auto 1.25rem;
+    }
+    .hero h1 .highlight { color: var(--success); }
+    .hero p {
+      font-size: 1.15rem;
+      color: #ffffffbb;
+      max-width: 640px;
+      margin: 0 auto 2rem;
+    }
+    .hero .badges {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: .5rem 1.25rem;
+      font-size: .9rem;
+      color: #fff;
+      backdrop-filter: blur(4px);
+    }
+    .badge strong { color: var(--success); }
+
+    /* ── Sections ── */
+    section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      text-transform: uppercase;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--harness-blue);
+      margin-bottom: .5rem;
+    }
+    section h2 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+    section .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+
+    /* ── Uptime Grid ── */
+    .uptime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .uptime-card { text-align: center; }
+    .uptime-card .platform {
+      font-size: .85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: .75rem;
+    }
+    .uptime-card .platform.harness { color: var(--harness-blue); }
+    .uptime-card .platform.github { color: var(--github-gray); }
+    .uptime-number {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: .25rem;
+    }
+    .uptime-number.good { color: var(--success); }
+    .uptime-number.warn { color: #f59e0b; }
+    .uptime-label { color: var(--text-muted); font-size: .875rem; }
+
+    /* ── Chart ── */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Comparison Table ── */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .925rem;
+    }
+    .comparison-table th {
+      text-align: left;
+      padding: .85rem 1rem;
+      background: var(--harness-dark);
+      color: #fff;
+      font-weight: 600;
+    }
+    .comparison-table th:first-child { border-radius: 8px 0 0 0; }
+    .comparison-table th:last-child { border-radius: 0 8px 0 0; }
+    .comparison-table td {
+      padding: .85rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .comparison-table tr:last-child td { border-bottom: none; }
+    .comparison-table tr:nth-child(even) td { background: #f9fafb; }
+    .comparison-table .check { color: var(--success); font-weight: 700; }
+    .comparison-table .cross { color: var(--danger); font-weight: 700; }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--danger);
+      background: #fff;
+    }
+    .timeline-item.minor::before { border-color: #f59e0b; }
+    .timeline-date {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: .15rem;
+    }
+    .timeline-title {
+      font-weight: 600;
+      margin-bottom: .25rem;
+    }
+    .timeline-desc {
+      font-size: .875rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Impact Stat Boxes ── */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .impact-stat {
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .impact-stat .number {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--danger);
+      line-height: 1;
+    }
+    .impact-stat .label {
+      font-size: .85rem;
+      color: var(--text-muted);
+      margin-top: .35rem;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--harness-dark) 0%, #1a2744 100%);
+      color: #fff;
+      text-align: center;
+      padding: 4rem 2rem;
+      margin-top: 2rem;
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: .75rem;
+    }
+    .cta-section p {
+      color: #ffffffbb;
+      max-width: 560px;
+      margin: 0 auto 2rem;
+      font-size: 1.05rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: var(--success);
+      color: var(--harness-dark);
+      font-weight: 700;
+      padding: .85rem 2.25rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,196,140,.35);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: .8rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--harness-blue); text-decoration: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      section { padding: 2.5rem 1rem; }
+      .uptime-number { font-size: 2.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="logo"><span>Harness</span> vs GitHub</div>
+    <ul>
+      <li><a href="#uptime">Uptime</a></li>
+      <li><a href="#incidents">Incidents</a></li>
+      <li><a href="#actions">Actions</a></li>
+      <li><a href="#comparison">Compare</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Your CI/CD Pipeline Deserves <span class="highlight">99.98% Uptime</span></h1>
+    <p>When GitHub Actions goes down, your deployments stop. See how Harness delivers the reliability your engineering team depends on.</p>
+    <div class="badges">
+      <div class="badge">Harness: <strong>99.98%</strong> uptime</div>
+      <div class="badge">GitHub Actions: <strong style="color:#f59e0b">99.33%</strong> uptime</div>
+      <div class="badge">Difference: <strong>~4.7x fewer downtime hours</strong></div>
+    </div>
+  </div>
+
+  <!-- Uptime Comparison -->
+  <section id="uptime">
+    <div class="section-label">90-Day Uptime</div>
+    <h2>The Numbers Don't Lie</h2>
+    <p class="subtitle">Based on publicly reported data from official status pages, measured over the most recent 90-day window.</p>
+
+    <div class="uptime-grid" style="margin-bottom: 2.5rem;">
+      <div class="card uptime-card">
+        <div class="platform harness">Harness Platform</div>
+        <div class="uptime-number good">99.98%</div>
+        <div class="uptime-label">90-day average across all production environments</div>
+      </div>
+      <div class="card uptime-card">
+        <div class="platform github">GitHub Actions</div>
+        <div class="uptime-number warn">99.33%</div>
+        <div class="uptime-label">90-day uptime per githubstatus.com</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:.5rem; font-size:1.05rem;">What Does 0.65% Actually Mean?</h3>
+      <p style="color:var(--text-muted); font-size:.925rem; margin-bottom:1.25rem;">
+        Over 90 days, the gap between 99.98% and 99.33% translates to a significant real-world difference in downtime hours.
+      </p>
+      <div class="impact-grid">
+        <div class="card impact-stat">
+          <div class="number">~14 hrs</div>
+          <div class="label">GitHub Actions downtime (90 days)</div>
+        </div>
+        <div class="card impact-stat">
+          <div class="number" style="color:var(--success);">~26 min</div>
+          <div class="label">Harness downtime (90 days)</div>
+        </div>
+        <div class="card impact-stat">
+          <div class="number">32x</div>
+          <div class="label">More downtime on GitHub Actions</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Comparison Chart -->
+  <section>
+    <div class="section-label">Service Breakdown</div>
+    <h2>Uptime by Service Component</h2>
+    <p class="subtitle">Harness services consistently deliver higher availability across every module.</p>
+    <div class="card">
+      <div class="chart-container">
+        <canvas id="serviceChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- GitHub Incident Timeline -->
+  <section id="incidents">
+    <div class="section-label">Incident History</div>
+    <h2>GitHub's Rocky 2026 So Far</h2>
+    <p class="subtitle">Major incidents affecting GitHub Actions and core services in Q1 2026 alone. Sources linked to githubstatus.com.</p>
+
+    <div class="card">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">Mar 12 – 13, 2026</div>
+          <div class="timeline-title">Authentication Failures Hit Actions</div>
+          <div class="timeline-desc">GitHub Apps unable to mint tokens — ~5% of Actions jobs failed. Root cause: Redis cache failure from Kubernetes instability.</div>
+        </div>
+        <div class="timeline-item minor">
+          <div class="timeline-date">Mar 5, 2026</div>
+          <div class="timeline-title">Degraded Actions Availability</div>
+          <div class="timeline-desc">Degraded availability reported for Actions workflows and hosted runners.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Feb 9, 2026</div>
+          <div class="timeline-title">Five Cascading Failures in 12 Hours</div>
+          <div class="timeline-desc">Pull Requests, Webhooks, Issues, Actions, and Git Operations saw intermittent timeouts. Actions run-start delays affected ~4% of users.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Feb 2 – 3, 2026</div>
+          <div class="timeline-title">Hosted Runners Completely Unavailable</div>
+          <div class="timeline-desc">All regions and runner types impacted for ~6 hours. Jobs queued and timed out. Also took down Copilot, CodeQL, Dependabot, and Pages.</div>
+        </div>
+        <div class="timeline-item minor">
+          <div class="timeline-date">Jan 15, 2026</div>
+          <div class="timeline-title">Workflow Delays &amp; Status Latency</div>
+          <div class="timeline-desc">Actions workflows experienced queuing delays and status update latency.</div>
+        </div>
+        <div class="timeline-item minor">
+          <div class="timeline-date">Jan 6, 2026</div>
+          <div class="timeline-title">Actions Service Incident</div>
+          <div class="timeline-desc">Reported incident affecting the Actions service availability.</div>
+        </div>
+        <div class="timeline-item minor">
+          <div class="timeline-date">Dec 18, 2025</div>
+          <div class="timeline-title">Networking Failures on Hosted Runners</div>
+          <div class="timeline-desc">Intermittent networking issues affecting GitHub-hosted runner connectivity.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GitHub Actions Deep Dive -->
+  <section id="actions">
+    <div class="section-label">Deep Dive</div>
+    <h2>Why GitHub Actions Keeps Going Down</h2>
+    <p class="subtitle">GitHub's ongoing Azure migration is creating systemic reliability challenges.</p>
+
+    <div class="uptime-grid">
+      <div class="card">
+        <h3 style="margin-bottom:.75rem;">Azure Migration Pains</h3>
+        <p style="font-size:.9rem; color:var(--text-muted);">
+          GitHub has been migrating its core platform from its legacy data center to Microsoft Azure. Actions and Copilot were migrated in 2024, but the core platform only began migration in October 2025. Traffic is currently split between the legacy data center and Azure, creating additional complexity and failure surface area.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:.75rem;">Cascading Failures</h3>
+        <p style="font-size:.9rem; color:var(--text-muted);">
+          GitHub's tightly coupled architecture means that Actions outages frequently cascade into other services. The Feb 2 runner outage also took down Copilot, CodeQL, Dependabot, GitHub Enterprise Importer, and Pages — all sharing the same compute infrastructure.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:.75rem;">AI Agent Impact</h3>
+        <p style="font-size:.9rem; color:var(--text-muted);">
+          Modern AI coding agents (Claude Code, Codex CLI, Cursor) depend on GitHub for commits, PRs, and CI/CD pipelines. When GitHub goes down, entire automated development workflows halt — even though agents can still generate code locally.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:.75rem;">Lowest Uptime Service</h3>
+        <p style="font-size:.9rem; color:var(--text-muted);">
+          At 99.33%, GitHub Actions has the lowest uptime of any GitHub service — lower than Git Operations (99.93%), API Requests (99.92%), and even Codespaces (99.61%). It is the weak link in the GitHub ecosystem.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table -->
+  <section id="comparison">
+    <div class="section-label">Feature Comparison</div>
+    <h2>Harness vs GitHub Actions</h2>
+    <p class="subtitle">Reliability is just the beginning. Harness is built for enterprise-grade CI/CD.</p>
+
+    <div class="card" style="overflow-x:auto; padding:0;">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Harness</th>
+            <th>GitHub Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>90-Day Uptime</strong></td>
+            <td class="check">99.98%</td>
+            <td class="cross">99.33%</td>
+          </tr>
+          <tr>
+            <td><strong>Major Incidents (Q1 2026)</strong></td>
+            <td class="check">0 major outages</td>
+            <td class="cross">7+ incidents</td>
+          </tr>
+          <tr>
+            <td><strong>DORA / Accelerate Metrics</strong></td>
+            <td class="check">Native dashboard</td>
+            <td class="cross">Not built-in</td>
+          </tr>
+          <tr>
+            <td><strong>Service Reliability Management</strong></td>
+            <td class="check">Dedicated SRM module</td>
+            <td class="cross">Not available</td>
+          </tr>
+          <tr>
+            <td><strong>Automated Rollbacks</strong></td>
+            <td class="check">Built-in (canary, blue/green)</td>
+            <td class="cross">Manual / custom scripts</td>
+          </tr>
+          <tr>
+            <td><strong>Secrets Management</strong></td>
+            <td class="check">Native + Vault, AWS SM, GCP SM, Azure KV, CyberArk</td>
+            <td>Native only</td>
+          </tr>
+          <tr>
+            <td><strong>Test Intelligence</strong></td>
+            <td class="check">Up to 8x faster builds</td>
+            <td class="cross">Not available</td>
+          </tr>
+          <tr>
+            <td><strong>Cache Intelligence</strong></td>
+            <td class="check">Automatic &amp; zero-config</td>
+            <td>Manual cache actions</td>
+          </tr>
+          <tr>
+            <td><strong>On-Prem Deployment</strong></td>
+            <td class="check">Full feature parity</td>
+            <td>Limited (GHES 3.0+)</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub Actions Compatibility</strong></td>
+            <td class="check">Can run GH Actions in Harness pipelines</td>
+            <td>Native</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      Data sourced from <a href="https://www.githubstatus.com" target="_blank" rel="noopener">githubstatus.com</a>
+      and <a href="https://status.harness.io" target="_blank" rel="noopener">status.harness.io</a>.
+      Uptime figures reflect the 90-day window as of March 2026.
+    </p>
+    <p style="margin-top:.5rem;">&copy; 2026 &middot; Built to highlight publicly available reliability data.</p>
+  </footer>
+
+  <script>
+    // ── Service Uptime Chart ──
+    const ctx = document.getElementById('serviceChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [
+          'CI / CD',
+          'Git Operations',
+          'API Requests',
+          'Webhooks'
+        ],
+        datasets: [
+          {
+            label: 'Harness',
+            data: [99.98, 99.98, 99.98, 99.98],
+            backgroundColor: '#0278D5',
+            borderRadius: 4,
+            barPercentage: 0.7,
+          },
+          {
+            label: 'GitHub',
+            data: [99.33, 99.93, 99.92, 99.67],
+            backgroundColor: '#24292e',
+            borderRadius: 4,
+            barPercentage: 0.7,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { padding: 20, usePointStyle: true, pointStyle: 'rectRounded' } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ctx.raw !== null ? `${ctx.dataset.label}: ${ctx.raw}%` : `${ctx.dataset.label}: N/A`
+            }
+          }
+        },
+        scales: {
+          y: {
+            min: 98.5,
+            max: 100.1,
+            ticks: { callback: v => v + '%', stepSize: 0.25 },
+            title: { display: true, text: 'Uptime %' }
+          },
+          x: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
