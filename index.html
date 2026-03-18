@@ -381,7 +381,7 @@
   <section>
     <div class="section-label">Service Breakdown</div>
     <h2>Uptime by Service Component</h2>
-    <p class="subtitle">Per-service uptime from The Missing GitHub Status Page vs Harness. GitHub's own status page does not publish per-service uptime percentages.</p>
+    <p class="subtitle">Per-service uptime from <a href="https://www.githubstatus.com/uptime" target="_blank" rel="noopener" style="color:var(--harness-blue)">GitHub's own status page</a> vs Harness. 3-month average (Jan – Mar 2026).</p>
     <div class="card">
       <div class="chart-container">
         <canvas id="serviceChart"></canvas>
@@ -491,14 +491,14 @@
   <!-- GitHub Actions Deep Dive -->
   <section id="actions">
     <div class="section-label">Deep Dive</div>
-    <h2>Why GitHub Actions Keeps Going Down</h2>
-    <p class="subtitle">GitHub's ongoing Azure migration is creating systemic reliability challenges.</p>
+    <h2>What GitHub's Own Numbers Reveal</h2>
+    <p class="subtitle">Even by GitHub's self-reported metrics, every service falls short of Harness's 99.98%.</p>
 
     <div class="uptime-grid">
       <div class="card">
-        <h3 style="margin-bottom:.75rem;">Azure Migration Pains</h3>
+        <h3 style="margin-bottom:.75rem;">Actions: The Weakest Link</h3>
         <p style="font-size:.9rem; color:var(--text-muted);">
-          GitHub has been migrating its core platform from its legacy data center to Microsoft Azure. Actions and Copilot were migrated in 2024, but the core platform only began migration in October 2025. Traffic is currently split between the legacy data center and Azure, creating additional complexity and failure surface area.
+          GitHub reports Actions at just 99.19% uptime — the lowest of any service. That's over 5 hours of downtime per month. February 2026 was the worst at 98.70%, with hosted runners going down for 220 minutes in a single incident.
         </p>
       </div>
       <div class="card">
@@ -508,15 +508,15 @@
         </p>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:.75rem;">AI Agent Impact</h3>
+        <h3 style="margin-bottom:.75rem;">No Service Hits 99.95%</h3>
         <p style="font-size:.9rem; color:var(--text-muted);">
-          Modern AI coding agents (Claude Code, Codex CLI, Cursor) depend on GitHub for commits, PRs, and CI/CD pipelines. When GitHub goes down, entire automated development workflows halt — even though agents can still generate code locally.
+          Per GitHub's own status page: Actions is at 99.19%, Webhooks at 99.51%, Issues at 99.61%, Pull Requests at 99.70%, API Requests at 99.91%, and Git Operations at 99.92%. Not a single service reaches Harness's 99.98% bar.
         </p>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:.75rem;">Every Service Is Struggling</h3>
+        <h3 style="margin-bottom:.75rem;">AI Agent Impact</h3>
         <p style="font-size:.9rem; color:var(--text-muted);">
-          Per third-party tracking, Actions is at 96.55% uptime, Webhooks at 96.79%, Pull Requests at 96.88%, and even Git Operations — the most basic function — is at 97.42%. No GitHub service is above 98% right now.
+          Modern AI coding agents (Claude Code, Codex CLI, Cursor) depend on GitHub for commits, PRs, and CI/CD pipelines. When GitHub goes down, entire automated development workflows halt — even though agents can still generate code locally.
         </p>
       </div>
     </div>
@@ -632,8 +632,8 @@
             barPercentage: 0.7,
           },
           {
-            label: 'GitHub (Third-Party)',
-            data: [96.55, 97.42, 97.31, 96.79, 96.88, 96.95],
+            label: 'GitHub (Self-Reported)',
+            data: [99.19, 99.92, 99.91, 99.51, 99.70, 99.61],
             backgroundColor: '#24292e',
             borderRadius: 4,
             barPercentage: 0.7,
@@ -654,9 +654,9 @@
         },
         scales: {
           y: {
-            min: 95,
+            min: 98.5,
             max: 100,
-            ticks: { callback: v => v + '%', stepSize: 1 },
+            ticks: { callback: v => v + '%', stepSize: 0.5 },
             title: { display: true, text: 'Uptime %' }
           },
           x: {
