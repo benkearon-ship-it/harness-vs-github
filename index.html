@@ -311,11 +311,11 @@
   <!-- Hero -->
   <div class="hero">
     <h1>Your CI/CD Pipeline Deserves <span class="highlight">99.98% Uptime</span></h1>
-    <p>When GitHub Actions goes down, your deployments stop. See how Harness delivers the reliability your engineering team depends on.</p>
+    <p>GitHub has had 84 incidents and 213+ hours of downtime in just the last 90 days. See how Harness delivers the reliability your engineering team depends on.</p>
     <div class="badges">
       <div class="badge">Harness: <strong>99.98%</strong> uptime</div>
-      <div class="badge">GitHub Actions: <strong style="color:#f59e0b">99.33%</strong> uptime</div>
-      <div class="badge">Difference: <strong>~4.7x fewer downtime hours</strong></div>
+      <div class="badge">GitHub Platform: <strong style="color:#e74c3c">90.12%</strong> uptime</div>
+      <div class="badge">GitHub: <strong style="color:#e74c3c">84 incidents</strong> in 90 days</div>
     </div>
   </div>
 
@@ -323,7 +323,7 @@
   <section id="uptime">
     <div class="section-label">90-Day Uptime</div>
     <h2>The Numbers Don't Lie</h2>
-    <p class="subtitle">Based on publicly reported data from official status pages, measured over the most recent 90-day window.</p>
+    <p class="subtitle">Based on incident data from <a href="https://mrshu.github.io/github-statuses/" target="_blank" rel="noopener" style="color:var(--harness-blue)">The Missing GitHub Status Page</a>, measured over the most recent 90-day window (Dec 17, 2025 – Mar 17, 2026).</p>
 
     <div class="uptime-grid" style="margin-bottom: 2.5rem;">
       <div class="card uptime-card">
@@ -332,29 +332,33 @@
         <div class="uptime-label">90-day average across all production environments</div>
       </div>
       <div class="card uptime-card">
-        <div class="platform github">GitHub Actions</div>
-        <div class="uptime-number warn">99.33%</div>
-        <div class="uptime-label">90-day uptime per githubstatus.com</div>
+        <div class="platform github">GitHub Platform</div>
+        <div class="uptime-number" style="color:#e74c3c;">90.12%</div>
+        <div class="uptime-label">90-day uptime computed from incident data</div>
       </div>
     </div>
 
     <div class="card">
-      <h3 style="margin-bottom:.5rem; font-size:1.05rem;">What Does 0.65% Actually Mean?</h3>
+      <h3 style="margin-bottom:.5rem; font-size:1.05rem;">What Does a ~10% Gap Actually Mean?</h3>
       <p style="color:var(--text-muted); font-size:.925rem; margin-bottom:1.25rem;">
-        Over 90 days, the gap between 99.98% and 99.33% translates to a significant real-world difference in downtime hours.
+        Over 90 days, the gap between 99.98% and 90.12% translates to a staggering real-world difference in downtime.
       </p>
       <div class="impact-grid">
         <div class="card impact-stat">
-          <div class="number">~14 hrs</div>
-          <div class="label">GitHub Actions downtime (90 days)</div>
+          <div class="number">213 hrs</div>
+          <div class="label">GitHub platform downtime (90 days)</div>
         </div>
         <div class="card impact-stat">
           <div class="number" style="color:var(--success);">~26 min</div>
           <div class="label">Harness downtime (90 days)</div>
         </div>
         <div class="card impact-stat">
-          <div class="number">32x</div>
-          <div class="label">More downtime on GitHub Actions</div>
+          <div class="number">84</div>
+          <div class="label">GitHub incidents in 90 days</div>
+        </div>
+        <div class="card impact-stat">
+          <div class="number">16</div>
+          <div class="label">Major severity incidents</div>
         </div>
       </div>
     </div>
@@ -372,48 +376,100 @@
     </div>
   </section>
 
-  <!-- GitHub Incident Timeline -->
+  <!-- GitHub's Own Numbers -->
   <section id="incidents">
-    <div class="section-label">Incident History</div>
-    <h2>GitHub's Rocky 2026 So Far</h2>
-    <p class="subtitle">Major incidents affecting GitHub Actions and core services in Q1 2026 alone. Sources linked to githubstatus.com.</p>
+    <div class="section-label">GitHub's Own Numbers</div>
+    <h2>Taking Their Word For It</h2>
+    <p class="subtitle">These are the incidents GitHub themselves reported via <a href="https://www.githubstatus.com" target="_blank" rel="noopener" style="color:var(--harness-blue)">githubstatus.com</a>. Looks bad, right?</p>
 
     <div class="card">
       <div class="timeline">
         <div class="timeline-item">
-          <div class="timeline-date">Mar 12 – 13, 2026</div>
-          <div class="timeline-title">Authentication Failures Hit Actions</div>
-          <div class="timeline-desc">GitHub Apps unable to mint tokens — ~5% of Actions jobs failed. Root cause: Redis cache failure from Kubernetes instability.</div>
+          <div class="timeline-date">Mar 12, 2026</div>
+          <div class="timeline-title">Actions 401 Unauthorized Failures</div>
+          <div class="timeline-desc">Actions jobs failed to download tarballs and mint tokens. 76 minutes of downtime.</div>
         </div>
-        <div class="timeline-item minor">
+        <div class="timeline-item">
           <div class="timeline-date">Mar 5, 2026</div>
-          <div class="timeline-title">Degraded Actions Availability</div>
-          <div class="timeline-desc">Degraded availability reported for Actions workflows and hosted runners.</div>
+          <div class="timeline-title">Multiple Services Degraded</div>
+          <div class="timeline-desc">175 min major outage across multiple services, followed by another 62 min Actions outage the same day.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Mar 3, 2026</div>
+          <div class="timeline-title">Incident with All GitHub Services</div>
+          <div class="timeline-desc">83 minutes of major impact across the entire platform.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-date">Feb 9, 2026</div>
           <div class="timeline-title">Five Cascading Failures in 12 Hours</div>
-          <div class="timeline-desc">Pull Requests, Webhooks, Issues, Actions, and Git Operations saw intermittent timeouts. Actions run-start delays affected ~4% of users.</div>
+          <div class="timeline-desc">Pull Requests, Webhooks, Issues, Actions, and Git Operations all hit. 6 separate incidents in a single day.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-date">Feb 2 – 3, 2026</div>
-          <div class="timeline-title">Hosted Runners Completely Unavailable</div>
-          <div class="timeline-desc">All regions and runner types impacted for ~6 hours. Jobs queued and timed out. Also took down Copilot, CodeQL, Dependabot, and Pages.</div>
+          <div class="timeline-title">Actions Hosted Runners Down + Codespaces Major Outage</div>
+          <div class="timeline-desc">220 min Actions outage, 277 min Codespaces outage. Also impacted Copilot, CodeQL, Dependabot, and Pages.</div>
         </div>
-        <div class="timeline-item minor">
+        <div class="timeline-item">
           <div class="timeline-date">Jan 15, 2026</div>
-          <div class="timeline-title">Workflow Delays &amp; Status Latency</div>
-          <div class="timeline-desc">Actions workflows experienced queuing delays and status update latency.</div>
+          <div class="timeline-title">Issues &amp; Pull Requests Major Outage</div>
+          <div class="timeline-desc">100-minute major incident plus Actions workflow delays.</div>
         </div>
         <div class="timeline-item minor">
-          <div class="timeline-date">Jan 6, 2026</div>
-          <div class="timeline-title">Actions Service Incident</div>
-          <div class="timeline-desc">Reported incident affecting the Actions service availability.</div>
+          <div class="timeline-date">Jan 9 – 10, 2026</div>
+          <div class="timeline-title">Disruption with GitHub Services</div>
+          <div class="timeline-desc">520 minutes of disruption spanning overnight.</div>
         </div>
         <div class="timeline-item minor">
-          <div class="timeline-date">Dec 18, 2025</div>
-          <div class="timeline-title">Networking Failures on Hosted Runners</div>
-          <div class="timeline-desc">Intermittent networking issues affecting GitHub-hosted runner connectivity.</div>
+          <div class="timeline-date">Dec 31, 2025</div>
+          <div class="timeline-title">New Year's Eve Disruption</div>
+          <div class="timeline-desc">1,111 minutes (18.5 hours) of service disruption to ring in the new year.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Third-Party Data -->
+  <section>
+    <div class="section-label">Independent Verification</div>
+    <h2>...And That Was Just Taking Their Word For It</h2>
+    <p class="subtitle">Here's what it looks like when a third party actually tracks it. Data from <a href="https://mrshu.github.io/github-statuses/" target="_blank" rel="noopener" style="color:var(--harness-blue)">The Missing GitHub Status Page</a> — an open-source project that reconstructs real uptime from archived status data.</p>
+
+    <div class="uptime-grid" style="margin-bottom: 1.5rem;">
+      <div class="card">
+        <h3 style="margin-bottom:.75rem;">The Real 90-Day Picture</h3>
+        <p style="font-size:.9rem; color:var(--text-muted); margin-bottom:1rem;">
+          When you reconstruct minute-level downtime from every status update — not just the ones GitHub highlights — the numbers get worse. Much worse.
+        </p>
+        <div class="impact-grid" style="margin-top:0;">
+          <div class="card impact-stat">
+            <div class="number">84</div>
+            <div class="label">Total incidents tracked</div>
+          </div>
+          <div class="card impact-stat">
+            <div class="number">16</div>
+            <div class="label">Major severity</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:.75rem;">Monthly Trend (Getting Worse)</h3>
+        <div style="font-size:.9rem; color:var(--text-muted);">
+          <div style="display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border);">
+            <span><strong>Dec 2025</strong></span>
+            <span>6 incidents · 24.4 hrs downtime · <strong style="color:#f59e0b">96.62%</strong></span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border);">
+            <span><strong>Jan 2026</strong></span>
+            <span>24 incidents · 39.8 hrs downtime · <strong style="color:#e74c3c">94.48%</strong></span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border);">
+            <span><strong>Feb 2026</strong></span>
+            <span>36 incidents · 97.2 hrs downtime · <strong style="color:#e74c3c">86.50%</strong></span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:.5rem 0;">
+            <span><strong>Mar 2026</strong> (partial)</span>
+            <span>18 incidents · 52.2 hrs downtime · <strong style="color:#e74c3c">92.75%</strong></span>
+          </div>
         </div>
       </div>
     </div>
@@ -445,9 +501,9 @@
         </p>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:.75rem;">Lowest Uptime Service</h3>
+        <h3 style="margin-bottom:.75rem;">Every Service Is Struggling</h3>
         <p style="font-size:.9rem; color:var(--text-muted);">
-          At 99.33%, GitHub Actions has the lowest uptime of any GitHub service — lower than Git Operations (99.93%), API Requests (99.92%), and even Codespaces (99.61%). It is the weak link in the GitHub ecosystem.
+          Per third-party tracking, Actions is at 96.55% uptime, Webhooks at 96.79%, Pull Requests at 96.88%, and even Git Operations — the most basic function — is at 97.42%. No GitHub service is above 98% right now.
         </p>
       </div>
     </div>
@@ -470,14 +526,14 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>90-Day Uptime</strong></td>
+            <td><strong>90-Day Platform Uptime</strong></td>
             <td class="check">99.98%</td>
-            <td class="cross">99.33%</td>
+            <td class="cross">90.12%</td>
           </tr>
           <tr>
-            <td><strong>Major Incidents (Q1 2026)</strong></td>
+            <td><strong>Incidents (Last 90 Days)</strong></td>
             <td class="check">0 major outages</td>
-            <td class="cross">7+ incidents</td>
+            <td class="cross">84 incidents (16 major)</td>
           </tr>
           <tr>
             <td><strong>DORA / Accelerate Metrics</strong></td>
@@ -527,9 +583,10 @@
   <!-- Footer -->
   <footer>
     <p>
-      Data sourced from <a href="https://www.githubstatus.com" target="_blank" rel="noopener">githubstatus.com</a>
-      and <a href="https://status.harness.io" target="_blank" rel="noopener">status.harness.io</a>.
-      Uptime figures reflect the 90-day window as of March 2026.
+      GitHub data sourced from <a href="https://mrshu.github.io/github-statuses/" target="_blank" rel="noopener">The Missing GitHub Status Page</a>
+      (an open-source project reconstructing uptime from <a href="https://www.githubstatus.com" target="_blank" rel="noopener">githubstatus.com</a> archives).
+      Harness data from <a href="https://status.harness.io" target="_blank" rel="noopener">status.harness.io</a>.
+      All figures reflect the 90-day window ending March 17, 2026.
     </p>
     <p style="margin-top:.5rem;">&copy; 2026 &middot; Built to highlight publicly available reliability data.</p>
   </footer>
@@ -541,22 +598,24 @@
       type: 'bar',
       data: {
         labels: [
-          'CI / CD',
+          'CI / CD (Actions)',
           'Git Operations',
           'API Requests',
-          'Webhooks'
+          'Webhooks',
+          'Pull Requests',
+          'Issues'
         ],
         datasets: [
           {
             label: 'Harness',
-            data: [99.98, 99.98, 99.98, 99.98],
+            data: [99.98, 99.98, 99.98, 99.98, 99.98, 99.98],
             backgroundColor: '#0278D5',
             borderRadius: 4,
             barPercentage: 0.7,
           },
           {
             label: 'GitHub',
-            data: [99.33, 99.93, 99.92, 99.67],
+            data: [96.55, 97.42, 97.31, 96.79, 96.88, 96.95],
             backgroundColor: '#24292e',
             borderRadius: 4,
             barPercentage: 0.7,
@@ -577,9 +636,9 @@
         },
         scales: {
           y: {
-            min: 98.5,
-            max: 100.1,
-            ticks: { callback: v => v + '%', stepSize: 0.25 },
+            min: 95,
+            max: 100.5,
+            ticks: { callback: v => v + '%', stepSize: 1 },
             title: { display: true, text: 'Uptime %' }
           },
           x: {
