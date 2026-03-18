@@ -288,6 +288,14 @@
     footer a { color: var(--harness-blue); text-decoration: none; }
 
     /* ── Responsive ── */
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 500px) {
+      .three-col { grid-template-columns: 1fr; }
+    }
     @media (max-width: 640px) {
       nav ul { display: none; }
       section { padding: 2.5rem 1rem; }
@@ -323,42 +331,47 @@
   <section id="uptime">
     <div class="section-label">90-Day Uptime</div>
     <h2>The Numbers Don't Lie</h2>
-    <p class="subtitle">Based on incident data from <a href="https://mrshu.github.io/github-statuses/" target="_blank" rel="noopener" style="color:var(--harness-blue)">The Missing GitHub Status Page</a>, measured over the most recent 90-day window (Dec 17, 2025 – Mar 17, 2026).</p>
+    <p class="subtitle">90-day uptime from three sources: <a href="https://status.harness.io" target="_blank" rel="noopener" style="color:var(--harness-blue)">status.harness.io</a>, <a href="https://www.githubstatus.com" target="_blank" rel="noopener" style="color:var(--harness-blue)">githubstatus.com</a>, and <a href="https://mrshu.github.io/github-statuses/" target="_blank" rel="noopener" style="color:var(--harness-blue)">The Missing GitHub Status Page</a> (Dec 17, 2025 – Mar 17, 2026).</p>
 
-    <div class="uptime-grid" style="margin-bottom: 2.5rem;">
+    <div class="three-col" style="margin-bottom: 2.5rem;">
       <div class="card uptime-card">
-        <div class="platform harness">Harness Platform</div>
+        <div class="platform harness">Harness</div>
         <div class="uptime-number good">99.98%</div>
-        <div class="uptime-label">90-day average across all production environments</div>
+        <div class="uptime-label">via status.harness.io</div>
       </div>
       <div class="card uptime-card">
-        <div class="platform github">GitHub Platform</div>
+        <div class="platform github">GitHub (Self-Reported)</div>
+        <div class="uptime-number warn">99.33%</div>
+        <div class="uptime-label">via githubstatus.com</div>
+      </div>
+      <div class="card uptime-card">
+        <div class="platform github">GitHub (Third-Party)</div>
         <div class="uptime-number" style="color:#e74c3c;">90.12%</div>
-        <div class="uptime-label">90-day uptime computed from incident data</div>
+        <div class="uptime-label">via The Missing GitHub Status Page</div>
       </div>
     </div>
 
     <div class="card">
-      <h3 style="margin-bottom:.5rem; font-size:1.05rem;">What Does a ~10% Gap Actually Mean?</h3>
+      <h3 style="margin-bottom:.5rem; font-size:1.05rem;">What Do These Numbers Mean In Practice?</h3>
       <p style="color:var(--text-muted); font-size:.925rem; margin-bottom:1.25rem;">
-        Over 90 days, the gap between 99.98% and 90.12% translates to a staggering real-world difference in downtime.
+        Even GitHub's own status page reports 99.33% — that's ~14 hours of downtime in 90 days. Independent tracking puts it at 213 hours. Either way, the gap with Harness is massive.
       </p>
       <div class="impact-grid">
-        <div class="card impact-stat">
-          <div class="number">213 hrs</div>
-          <div class="label">GitHub platform downtime (90 days)</div>
-        </div>
         <div class="card impact-stat">
           <div class="number" style="color:var(--success);">~26 min</div>
           <div class="label">Harness downtime (90 days)</div>
         </div>
         <div class="card impact-stat">
-          <div class="number">84</div>
-          <div class="label">GitHub incidents in 90 days</div>
+          <div class="number" style="color:#f59e0b;">~14 hrs</div>
+          <div class="label">GitHub downtime (self-reported)</div>
         </div>
         <div class="card impact-stat">
-          <div class="number">16</div>
-          <div class="label">Major severity incidents</div>
+          <div class="number">213 hrs</div>
+          <div class="label">GitHub downtime (third-party)</div>
+        </div>
+        <div class="card impact-stat">
+          <div class="number">84</div>
+          <div class="label">Incidents tracked (third-party)</div>
         </div>
       </div>
     </div>
@@ -368,7 +381,7 @@
   <section>
     <div class="section-label">Service Breakdown</div>
     <h2>Uptime by Service Component</h2>
-    <p class="subtitle">Harness services consistently deliver higher availability across every module.</p>
+    <p class="subtitle">Per-service uptime from The Missing GitHub Status Page vs Harness. GitHub's own status page does not publish per-service uptime percentages.</p>
     <div class="card">
       <div class="chart-container">
         <canvas id="serviceChart"></canvas>
@@ -378,9 +391,9 @@
 
   <!-- GitHub's Own Numbers -->
   <section id="incidents">
-    <div class="section-label">GitHub's Own Numbers</div>
-    <h2>Taking Their Word For It</h2>
-    <p class="subtitle">These are the incidents GitHub themselves reported via <a href="https://www.githubstatus.com" target="_blank" rel="noopener" style="color:var(--harness-blue)">githubstatus.com</a>. Looks bad, right?</p>
+    <div class="section-label">Source 1: GitHub Status Page</div>
+    <h2>GitHub's Self-Reported Incidents</h2>
+    <p class="subtitle">Major incidents GitHub reported via <a href="https://www.githubstatus.com" target="_blank" rel="noopener" style="color:var(--harness-blue)">githubstatus.com</a> in the last 90 days. Self-reported uptime: 99.33%.</p>
 
     <div class="card">
       <div class="timeline">
@@ -430,15 +443,15 @@
 
   <!-- Third-Party Data -->
   <section>
-    <div class="section-label">Independent Verification</div>
-    <h2>...And That Was Just Taking Their Word For It</h2>
-    <p class="subtitle">Here's what it looks like when a third party actually tracks it. Data from <a href="https://mrshu.github.io/github-statuses/" target="_blank" rel="noopener" style="color:var(--harness-blue)">The Missing GitHub Status Page</a> — an open-source project that reconstructs real uptime from archived status data.</p>
+    <div class="section-label">Source 2: The Missing GitHub Status Page</div>
+    <h2>Independent Third-Party Tracking</h2>
+    <p class="subtitle">Data from <a href="https://mrshu.github.io/github-statuses/" target="_blank" rel="noopener" style="color:var(--harness-blue)">The Missing GitHub Status Page</a> — an open-source project that reconstructs minute-level uptime from archived status data. Computed uptime: 90.12%.</p>
 
     <div class="uptime-grid" style="margin-bottom: 1.5rem;">
       <div class="card">
-        <h3 style="margin-bottom:.75rem;">The Real 90-Day Picture</h3>
+        <h3 style="margin-bottom:.75rem;">90-Day Incident Summary</h3>
         <p style="font-size:.9rem; color:var(--text-muted); margin-bottom:1rem;">
-          When you reconstruct minute-level downtime from every status update — not just the ones GitHub highlights — the numbers get worse. Much worse.
+          This project reconstructs minute-level downtime from every archived status update, capturing incidents that may not be reflected in aggregate uptime figures.
         </p>
         <div class="impact-grid" style="margin-top:0;">
           <div class="card impact-stat">
@@ -526,7 +539,12 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>90-Day Platform Uptime</strong></td>
+            <td><strong>90-Day Uptime (Self-Reported)</strong></td>
+            <td class="check">99.98%</td>
+            <td class="cross">99.33%</td>
+          </tr>
+          <tr>
+            <td><strong>90-Day Uptime (Third-Party)</strong></td>
             <td class="check">99.98%</td>
             <td class="cross">90.12%</td>
           </tr>
@@ -614,7 +632,7 @@
             barPercentage: 0.7,
           },
           {
-            label: 'GitHub',
+            label: 'GitHub (Third-Party)',
             data: [96.55, 97.42, 97.31, 96.79, 96.88, 96.95],
             backgroundColor: '#24292e',
             borderRadius: 4,
@@ -637,7 +655,7 @@
         scales: {
           y: {
             min: 95,
-            max: 100.5,
+            max: 100,
             ticks: { callback: v => v + '%', stepSize: 1 },
             title: { display: true, text: 'Uptime %' }
           },
